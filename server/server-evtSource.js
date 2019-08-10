@@ -42,7 +42,7 @@ http.createServer((req, res) => {
                 } else { // 推送文件后缀名hash值
 
                     console.log('推送文件后缀名hash值到客户端...', data);
-                    res.write(`data: ${data} \n\n`);
+                    res.write(`data: ${data}\n\n`);
                 }
             });
         }, 1000);

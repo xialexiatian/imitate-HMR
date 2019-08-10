@@ -57,11 +57,25 @@ evtSource.onmessage = function (e) {
     // === 对比hash值 变化刷新
     // 接受文件后缀名 hash值
     if (fileHash != e.data) {
+
+        // 插入前，先清理
+        /**
+         * 对比 vue 热更新，此处并未 采用 虚拟dom 可能会产生以下影响
+         * 虽删除原有元素，可能还有事件绑定多次，全局变量污染等等，
+         */
+        var insertScript = document.querySelector('.container');
+        if (insertScript) {
+            var root = document.querySelector('#app');
+            root.removeChild(insertScript);
+        }
+
+
         fileHash = e.data;
         console.log('若文件后缀名hash发生变化，插入新的js到 index.html中...', fileHash);
         var script = document.createElement("script");
         script.setAttribute("type", "text/javascript");
-        script.setAttribute("src", `./build/monitoring.${fileHash}.js`);
+        var filename = `./build/monitoring.${fileHash}.js`;
+        script.setAttribute("src", filename);
         var heads = document.getElementsByTagName("head");
         if (heads.length)
             heads[0].appendChild(script);

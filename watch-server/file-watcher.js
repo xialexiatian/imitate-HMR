@@ -61,6 +61,8 @@ fs.watch(monitoring, (event, filename) => {
 
         /**
          * 定时 100毫秒 监测
+         * 延时会导致文件读取 或  写入内容为空
+         * 若不延时，会导致短期多次插入，此处采取 100 毫秒延时处理，有兴趣者，可进行优化
          */
         if (fsWait) return;
         fsWait = setTimeout(() => {
@@ -68,6 +70,7 @@ fs.watch(monitoring, (event, filename) => {
         }, 100);
 
         /**
+         * 对 文件进行 读取 写入，会存在操作 延时
          * 监听文件变化后，执行 回调操作逻辑
          * 压缩 更改文件 (此处并未处理压缩，可查阅相关资料自行实现)
          * 打上 hash 后缀 (此处只是读取文件内容，添加 hash 为文件后缀名，有多种实现方式，可查阅相关资料自行实现)
@@ -79,6 +82,7 @@ fs.watch(monitoring, (event, filename) => {
                 console.log('读取文件.......fail');
             } else { // 写入文件
 
+                console.log('打印文件内容.......', data);
                 // 利用修改文件时间戳，代替hash (上方注释代码也有各种实现方式，可自行研究官方文档)
                 let timestamp = +new Date();
                 fs.writeFile(`../build/monitoring.${timestamp}.js`, data.toString(), 'utf8', (err, data) => {
