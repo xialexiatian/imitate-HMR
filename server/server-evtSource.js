@@ -20,22 +20,37 @@ http.createServer((req, res) => {
         /**
          * 默认事件
          */
+        // let seconds = 0;
         // setInterval(() => {
-        // 默认情况下，服务器每十秒推送一条信息到浏览器
+        //     seconds++;
+        //     console.log(`执行定时一秒操作...${seconds}\n`);
         //     res.write(`data: ${new Date()} \n\n`);
-        // }, 10000);
+        // }, 1000);// 默认情况下，服务器每一秒推送一条信息到浏览器
 
 
 
         /**
          * 自定义类型事件
          */
+        let flag = false;
         setInterval(() => {
-            // 默认情况下，服务器每十秒推送一条信息到浏览器
-            res.write('event: APPLE\n');
-            res.write('data: 这是一个自定义的APPLE类型事件\n');
-            res.write('data: 多个data字段将被解析成一个字段\n\n');
-        }, 10000);
+
+            if (flag) {
+
+                console.log('偶数类型事件...', flag);
+                res.write('event: EVEN\n'); // 定义事件名
+                res.write('data: 这是一个自定义的偶数类型事件\n\n'); // 发送 data 具体数据值 必须要以 \n\n 换行结尾，否则会认为消息未写完,成 pending 状态
+
+                flag = false;
+            } else {
+
+                console.log('奇数类型事件...', flag);
+                res.write('event: ODD\n');
+                res.write('data: 这是一个自定义的奇数类型事件\n\n');
+
+                flag = true;
+            }
+        }, 1000);// 默认情况下，服务器每一秒推送一条信息到浏览器
 
     }
 

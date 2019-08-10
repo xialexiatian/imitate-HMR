@@ -1,2 +1,2 @@
 # imitate-HMR
-实现--Webpack 热更新实现原理分析
+模仿--Webpack 热更新原理分析
