@@ -1,3 +1,6 @@
+/**
+ * 服务端 EventSource
+ */
 const http = require('http');
 const fs = require('fs');
 

@@ -1,3 +1,6 @@
+/**
+ * 文件监听服务
+ */
 const fs = require('fs');
 const md5 = require('md5');
 require("log-timestamp");

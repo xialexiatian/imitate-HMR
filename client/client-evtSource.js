@@ -1,4 +1,8 @@
 /**
+ * 客户端 EventSource
+ */
+
+/**
  * 如需支持发送cookie，请设置响应头Access-Control-Allow-Origin': req.headers.origin 和 Access-Control-Allow-Credentials:true，
  * 并且创建evtSource对象时，需要明确指定是否发送凭证。
  */
