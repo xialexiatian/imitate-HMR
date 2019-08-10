@@ -1,3 +1,7 @@
+/**
+ * 利用第三方库
+ * 也可自行查阅官方文档，自行实现 socket
+ */
 var WebSocketServer = require('ws').Server,
     server = new WebSocketServer({ port: 10103 });
 

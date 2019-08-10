@@ -1,10 +1,10 @@
 {
   "name": "imitate-hot-module-replacement",
   "version": "1.0.0",
-  "description": "实现--Webpack 热更新实现原理分析",
+  "description": "模仿--Webpack 热更新原理分析",
   "main": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "",
     "start": ""
   },
   "keywords": [],
@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "log-timestamp": "^0.3.0",
-    "md5": "^2.2.1"
+    "md5": "^2.2.1",
+    "ws": "^7.1.1"
   }
 }

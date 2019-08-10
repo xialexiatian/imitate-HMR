@@ -33,7 +33,7 @@ evtSource.onerror = function (e) {
  * 默认监听事件
  * nginx默认开启的buffer机制缓存了服务器推送的片段信息(proxy_buffering off)，缓存达到一定的量才会返回响应内容
  */
-let fileHash = '';
+let fileHash = '123';
 evtSource.onmessage = function (e) {
 
     console.log(`接收服务端消息... ${e.data}`); // 打印服务器推送的信息
