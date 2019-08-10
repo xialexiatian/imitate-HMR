@@ -12,7 +12,6 @@
   "license": "ISC",
   "dependencies": {
     "log-timestamp": "^0.3.0",
-    "md5": "^2.2.1",
-    "save": "^2.4.0"
+    "md5": "^2.2.1"
   }
 }

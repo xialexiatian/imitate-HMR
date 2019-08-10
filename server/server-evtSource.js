@@ -1,6 +1,10 @@
 const http = require('http');
 
 http.createServer((req, res) => {
+
+    /**
+     * client-server 端到端实时连接
+     */
     if (req.url === '/msg') {
         /**
          * 为了避免缓存，Cache-Control 特别设置成了 no-cache，
@@ -13,16 +17,32 @@ http.createServer((req, res) => {
             'Connection': 'keep-alive'
         });
 
-        res.write('event: APPLE\n');
-        res.write('data: 这是一个自定义的APPLE类型事件\n');
-        res.write('data: 多个data字段将被解析成一个字段\n\n');
-
-
+        /**
+         * 默认事件
+         */
         // setInterval(() => {
-        //     // 默认情况下，服务器每十秒推送一条信息到浏览器
+        // 默认情况下，服务器每十秒推送一条信息到浏览器
         //     res.write(`data: ${new Date()} \n\n`);
         // }, 10000);
+
+
+
+        /**
+         * 自定义类型事件
+         */
+        setInterval(() => {
+            // 默认情况下，服务器每十秒推送一条信息到浏览器
+            res.write('event: APPLE\n');
+            res.write('data: 这是一个自定义的APPLE类型事件\n');
+            res.write('data: 多个data字段将被解析成一个字段\n\n');
+        }, 10000);
+
     }
+
+    /**
+     * 可根据自身需求请求额外接口数据
+     */
+
 }).listen(9999, () => {
     console.log('Listening on 9999');
 });
