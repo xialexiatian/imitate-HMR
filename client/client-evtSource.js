@@ -31,23 +31,55 @@ evtSource.onerror = function (e) {
 
 /**
  * 默认监听事件
- * nginx 配置 proxy_buffering off; 打开，意味着积攒到一定数据大小再发送
- * nginx默认开启的buffer机制缓存了服务器推送的片段信息，缓存达到一定的量才会返回响应内容
+ * nginx默认开启的buffer机制缓存了服务器推送的片段信息(proxy_buffering off)，缓存达到一定的量才会返回响应内容
  */
-// evtSource.onmessage = function (e) {
+let fileHash = '';
+evtSource.onmessage = function (e) {
 
-//     console.log(`接收服务端消息... ${e.data}`); // 打印服务器推送的信息
-// };
+    console.log(`接收服务端消息... ${e.data}`); // 打印服务器推送的信息
+
+    /**
+     * 读取 build 文件夹下 文件
+     * 对比 hash 值 是否变化
+     * 进行 热更新
+     */
+
+    // === 无对比hash值 定时一秒刷新一遍 对应 file-watcher.js 中 exec(copyFile 方法
+    // var script = document.createElement("script");
+    // script.setAttribute("type", "text/javascript");
+    // script.setAttribute("src", "./build/monitoring.js");
+    // var heads = document.getElementsByTagName("head");
+    // if (heads.length)
+    //     heads[0].appendChild(script);
+    // else
+    //     document.documentElement.appendChild(script);
+
+    // === 对比hash值 变化刷新
+    // 接受文件后缀名 hash值
+    if (fileHash != e.data) {
+        fileHash = e.data;
+        console.log('若文件后缀名hash发生变化，插入新的js到 index.html中...', fileHash);
+        var script = document.createElement("script");
+        script.setAttribute("type", "text/javascript");
+        script.setAttribute("src", `./build/monitoring.${fileHash}.js`);
+        var heads = document.getElementsByTagName("head");
+        if (heads.length)
+            heads[0].appendChild(script);
+        else
+            document.documentElement.appendChild(script);
+    }
+
+};
 
 /**
  * 事件类型可以随你定义
  */
-evtSource.addEventListener("EVEN", function (e) {
+// evtSource.addEventListener("EVEN", function (e) {
 
-    console.log('偶数事件类型:', e.data);
-}, false);
+//     console.log('偶数事件类型:', e.data);
+// }, false);
 
-evtSource.addEventListener("ODD", function (e) {
+// evtSource.addEventListener("ODD", function (e) {
 
-    console.log('奇数事件类型:', e.data);
-}, false);
+//     console.log('奇数事件类型:', e.data);
+// }, false);

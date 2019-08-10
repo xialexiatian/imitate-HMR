@@ -1,21 +1,24 @@
 const fs = require('fs');
 const md5 = require('md5');
 require("log-timestamp");
-var exec = require('child_process').exec;
+const exec = require('child_process').exec;
 
 /**
- * 监听文件变化后，执行 回调操作逻辑，可直接编写 命令
+ * 直接编写 命令行
+ * tsConvertJs ts 转 js
+ * copyFile 拷贝文件
  */
-var cmd = 'tsc ../../ts/ts.ts';
+const tsConvertJs = 'tsc ./ts/ts.ts';
+const copyFile = 'cp ../views/monitoring.js ../build';
 
 /**
  * 读取 被修改文件
  */
 const monitoring = '../views/monitoring.js';
-console.log(`所监听文件....... ${monitoring}`);
+console.log(`所监听文件....... ${monitoring}\n`);
 
 // fs.watchFile(monitoring, (curr, prev) => {
-//     console.log(`${monitoring.js} file change`);
+//     console.log(`${monitoring} file change`);
 // });
 // fs.watch(monitoring.js, (event, filename) => {
 //     if (filename && event === 'change') {
@@ -38,7 +41,7 @@ console.log(`所监听文件....... ${monitoring}`);
 // let md5Previous = null;
 // fs.watch(monitoring, (event, filename) => {
 //     if (filename) {
-//         const md5Current = md5(fs.readFileSync(monitoring.js));
+//         const md5Current = md5(fs.readFileSync(monitoring));
 //         if (md5Current === md5Previous) {
 //             return;
 //         }
@@ -47,13 +50,17 @@ console.log(`所监听文件....... ${monitoring}`);
 //     }
 // })
 
+/**
+ * 监听 单个 ../views/monitoring.js 文件修改
+ * 可查阅官方 API 如何批量监听文件修改
+ */
 let fsWait = false;
 fs.watch(monitoring, (event, filename) => {
 
     if (filename) {
 
         /**
-         * 定时
+         * 定时 100毫秒 监测
          */
         if (fsWait) return;
         fsWait = setTimeout(() => {
@@ -62,19 +69,65 @@ fs.watch(monitoring, (event, filename) => {
 
         /**
          * 监听文件变化后，执行 回调操作逻辑
-         * 读取被改动文件内容，压缩，输入到 build 文件夹下
+         * 压缩 更改文件 (此处并未处理压缩，可查阅相关资料自行实现)
+         * 打上 hash 后缀 (此处只是读取文件内容，添加 hash 为文件后缀名，有多种实现方式，可查阅相关资料自行实现)
+         * 输出到 build 文件夹下
          */
-        exec(cmd, function (error, stdout, stderr) {
+        fs.readFile(monitoring, 'utf8', (err, data) => { // 读取文件
 
-            if (error) {
-                console.log('cmd 执行错误.......\n', error);
+            if (err) {
+                console.log('读取文件.......fail');
+            } else { // 写入文件
 
-            } else {
-                console.log('监听文件变化后，执行成功回调操作逻辑.......\n', stdout);
+                // 利用修改文件时间戳，代替hash (上方注释代码也有各种实现方式，可自行研究官方文档)
+                let timestamp = +new Date();
+                fs.writeFile(`../build/monitoring.${timestamp}.js`, data.toString(), 'utf8', (err, data) => {
+                    if (err) {
+                        console.log('写入文件.......fail');
+                    } else {
+                        console.log('写入文件.......success');
 
+                        // 此处 利用第三方文件内容进行值共享，(有各种实现方式，可自行研究官方文档)
+                        fs.writeFile(`../globalHash.js`, timestamp, 'utf8', (err, data) => {
+                            if (err) {
+                                console.log('写入hash.......fail');
+                            } else {
+                                console.log('写入hash.......success');
+                            }
+                        });
+                    }
+                });
             }
-
         });
-        console.log(`${filename} file Changed`);
+
+
+
+        /**
+         * 执行命令行方式，回调监听
+         */
+        // exec(copyFile, function (error, stdout, stderr) {
+
+        //     if (error) {
+        //         console.log('copyFile，error.......\n', error);
+
+        //     } else {
+        //         console.log('copyFile，success.......\n', stdout);
+
+        //     }
+
+        // });
+        // exec(tsConvertJs, function (error, stdout, stderr) {
+
+        //     if (error) {
+        //         console.log('tsConvertJs，执行错误.......\n', error);
+
+        //     } else {
+        //         console.log('tsConvertJs，success.......\n', stdout);
+
+        //     }
+
+        // });
+        //
+        console.log(`${filename} file Changed\n`);
     }
 });
