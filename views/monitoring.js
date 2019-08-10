@@ -11,7 +11,7 @@
     wrapper.setAttribute('class', 'container');
     wrapper.innerHTML = `
             <div style="color: red;font-size: 38px;">
-                我是好孩子，我来自东北！！！ssssafdsfs333
+                我是好孩子，我来自东北！！！
             </div>
         `;
 
